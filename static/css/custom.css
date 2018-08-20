@@ -1,3 +1,57 @@
-body{
-    background-color: #0CFCFC;
+.align-center {
+    text-align: center;
+}
+
+.align-left {
+    text-align: left;
+}
+
+.display-table {
+    display: table;
+    height: 95%;
+    margin: 40px auto 0 auto;
+}
+.display-table-cell {
+    display: table-cell;
+}
+
+#card-number {
+    font-size: 28px;
+}
+
+#screen {
+    text-align: center;
+    width: 440px;
+    border-radius:8px;
+    border: 1px solid;
+    padding:8px;
+    margin-top:20px;
+    margin-left:auto;
+    margin-right:auto;
+    background: #C0C0C0;
+}
+
+#display {
+    background: blue;
+    padding: 8px;
+    margin:16px 12px 10px 16px;
+    text-align: right;
+    color: yellow;
+    border-radius:8px;
+    height: 160px;
+}
+
+
+#keyboard {
+  text-align: center;
+  margin-bottom:8px;
+}
+
+.row {
+  margin-top: 4px;
+}
+
+button {
+  width: 62px;
+  margin: 2px;
 }
