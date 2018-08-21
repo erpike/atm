@@ -9,22 +9,26 @@
     <title>ATM</title>
 </head>
 <body>
-    {% block content %}
+
     <div class="container">
-        <div id="header" class="align-center">
-            <h3>Erpike-bank Terminal</h3>
+        <div id="header">
+            <h3>ATM</h3>
         </div>
-        <div id="screen">
+        <div id="box" class="text-center">
             <div id="display">
-                <div class="display-table">
-                    <div class="display-table-row align-left">
-                        Input your card number:
-                    </div>
-                    <div id="card-number" class="display-table-row"><u></u>
-                    </div>
-                </div>
+                {% block screen_content %}
+                {% endblock %}
             </div>
             <div id="keyboard">
+                <div class="row row-ctrl">
+                    {% block control_btns %}
+                        <button class="btn btn-primary btn-ctrl" value="">^</button>
+                        <button class="invisible" value=""></button>
+                        <button class="btn btn-primary btn-ctrl" value="">^</button>
+                        <button class="invisible" value=""></button>
+                        <button class="btn btn-primary btn-ctrl" value="">^</button>
+                    {% endblock %}
+                </div>
                 <div class="row">
                     <button class="btn btn-default btn-ctrl" value="7">7</button>
                     <button class="btn btn-default btn-ctrl" value="8">8</button>
@@ -43,12 +47,13 @@
                 <div class="row">
                     <button class="btn btn-warning btn-ctrl" value="C">C</button>
                     <button class="btn btn-default btn-ctrl" value="0">0</button>
-                    <button class="btn btn-success btn-ctrl" value="Enter">Enter</button>
+                    <form class="confirm-form">
+                        <button class="btn btn-success btn-ctrl" value="Enter">Enter</button>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
-    {% endblock %}
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script src="{% static 'js/bootstrap.min.js' %}"></script>

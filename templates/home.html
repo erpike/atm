@@ -1,5 +1,15 @@
 {% extends 'base.html' %}
 
-{% block content %}
-    {{block.super}}
+{% block screen_content %}
+<div>
+    <p>Input card number:</p>
+</div>
+    <div id="card-number"></div>
+    <br/>
+    <div id="hint-row">
+        <span id="left-hint"> qs a</span>
+        <span id="mid-hint">b asd</span>
+        <span id="right-hint">c asdas</span>
+    </div>
 {% endblock %}
+

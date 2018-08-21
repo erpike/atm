@@ -1,48 +1,47 @@
-.align-center {
+body {
+  background:#FCFCFC;
+}
+
+#header {
     text-align: center;
 }
 
-.align-left {
-    text-align: left;
-}
-
-.display-table {
-    display: table;
-    height: 95%;
-    margin: 40px auto 0 auto;
-}
-.display-table-cell {
-    display: table-cell;
-}
-
-#card-number {
-    font-size: 28px;
-}
-
-#screen {
+#box {
     text-align: center;
-    width: 440px;
+    width: 400px;
+    display: block;
     border-radius:8px;
     border: 1px solid;
+    bordel-color: #abc6c2;
     padding:8px;
     margin-top:20px;
     margin-left:auto;
     margin-right:auto;
-    background: #C0C0C0;
+    background:#A9A9A9;
 }
 
 #display {
-    background: blue;
+    background: #000080;
     padding: 8px;
     margin:16px 12px 10px 16px;
-    text-align: right;
-    color: yellow;
+    text-align: center;
+    font-family: 'Share Tech Mono', monospace;
     border-radius:8px;
-    height: 160px;
+    color: yellow;
+    height: 140px;
 }
 
+#card-number {
+  font-size: 25px;
+}
+
+#result, #previous {
+  text-align: center;
+  
+}
 
 #keyboard {
+  display: inline-block;  
   text-align: center;
   margin-bottom:8px;
 }
@@ -51,7 +50,44 @@
   margin-top: 4px;
 }
 
+.row-ctrl {
+    position: relative;
+    top: -10px;
+}
+
 button {
   width: 62px;
   margin: 2px;
+}
+
+.row-ctrl button{
+    height: 29px;
+    margin-bottom: 5px;
+}
+
+#hint-row {
+    display: block;
+    padding-top: 20px;
+}
+
+#left-hint {
+    text-align: left;
+    display: table-cell;
+    width: 120px;
+}
+
+#mid-hint {
+    display: table-cell;
+    width: 120px;
+    text-align: center;
+}
+
+#right-hint {
+display: table-cell;
+width: 120px;
+text-align: right;
+}
+
+.confirm-form{
+    display: inline;
 }
