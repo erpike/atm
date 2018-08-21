@@ -1,42 +1,20 @@
 {% extends 'base.html' %}
 {% load static %}
 
-
 {% block title %}{{block.super}} - Input Card Number{% endblock %}
 
 {% block content %}
 
-    <div class="row">
+    <div class="row input-field">
         <p>Input card number:</p>
         <div ><input id="card-num-input" class="align-center" type="text" /></div>
         <br/>
     </div>
 
-    <div class="row">
-        <button class="btn btn-default btn-ctrl" value="7">7</button>
-        <button class="btn btn-default btn-ctrl" value="8">8</button>
-        <button class="btn btn-default btn-ctrl" value="9">9</button>
-    </div>
-    <div class="row">
-        <button class="btn btn-default btn-ctrl" value="4">4</button>
-        <button class="btn btn-default btn-ctrl" value="5">5</button>
-        <button class="btn btn-default btn-ctrl" value="6">6</button>
-    </div>
-    <div class="row">
-        <button class="btn btn-default btn-ctrl" value="1">1</button>
-        <button class="btn btn-default btn-ctrl" value="2">2</button>
-        <button class="btn btn-default btn-ctrl" value="3">3</button>
-    </div>
-    <div class="row">
-        <button class="btn btn-warning btn-ctrl" value="C">C</button>
-        <button class="btn btn-default btn-ctrl" value="0">0</button>
-        <form class="confirm-form" method="GET" action="{% url 'cards:num_validator' %}">
-            <input type="hidden" name="card" id="card-num" value="">
-            <button class="btn btn-success btn-ctrl" value="Enter">Enter</button>
-        </form>
-    </div>
+    {% include 'keyboard.html' with action='/card/num/' %}
 {% endblock %}
 
 {% block script %}
     <script src="{% static 'js/functions.js' %}"></script>
+    <script src="{% static 'js/card_num_validator.js' %}"></script>
 {% endblock %}
