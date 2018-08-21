@@ -1,4 +1,6 @@
 {% extends 'base.html' %}
+{% load static %}
+
 
 {% block title %}{{block.super}} - Input Card Number{% endblock %}
 
@@ -33,4 +35,8 @@
             <button class="btn btn-success btn-ctrl" value="Enter">Enter</button>
         </form>
     </div>
+{% endblock %}
+
+{% block script %}
+    <script src="{% static 'js/functions.js' %}"></script>
 {% endblock %}

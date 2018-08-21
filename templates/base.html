@@ -6,59 +6,33 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/custom.css' %}" rel="stylesheet">
 
     <meta charset="UTF-8">
-    <title>ATM</title>
+    <title>{% block title %}ATM{% endblock %}</title>
 </head>
 <body>
-
     <div class="container">
-        <div id="header">
-            <h3>ATM</h3>
-        </div>
-        <div id="box" class="text-center">
-            <div id="display">
-                {% block screen_content %}
-                {% endblock %}
-            </div>
-            <div id="keyboard">
-                <div class="row row-ctrl">
-                    {% block control_btns %}
-                        <button class="btn btn-primary btn-ctrl" value="">^</button>
-                        <button class="invisible" value=""></button>
-                        <button class="btn btn-primary btn-ctrl" value="">^</button>
-                        <button class="invisible" value=""></button>
-                        <button class="btn btn-primary btn-ctrl" value="">^</button>
-                    {% endblock %}
-                </div>
-                <div class="row">
-                    <button class="btn btn-default btn-ctrl" value="7">7</button>
-                    <button class="btn btn-default btn-ctrl" value="8">8</button>
-                    <button class="btn btn-default btn-ctrl" value="9">9</button>
-                </div>
-                <div class="row">
-                    <button class="btn btn-default btn-ctrl" value="4">4</button>
-                    <button class="btn btn-default btn-ctrl" value="5">5</button>
-                    <button class="btn btn-default btn-ctrl" value="6">6</button>
-                </div>
-                <div class="row">
-                    <button class="btn btn-default btn-ctrl" value="1">1</button>
-                    <button class="btn btn-default btn-ctrl" value="2">2</button>
-                    <button class="btn btn-default btn-ctrl" value="3">3</button>
-                </div>
-                <div class="row">
-                    <button class="btn btn-warning btn-ctrl" value="C">C</button>
-                    <button class="btn btn-default btn-ctrl" value="0">0</button>
-                    <form class="confirm-form">
-                        <button class="btn btn-success btn-ctrl" value="Enter">Enter</button>
-                    </form>
-                </div>
-            </div>
+        <nav class="navbar navbar-default navbar-static-top align-center">
+            <h4 class="align-center">Cash MachinE</h4>
+        </nav>
+        <div class="col-sm-6 col-sm-offset-3 align-center">
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-dismissible alert-{% if message.tags == 'error' %}danger{% endif %} align-left">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                        {{message}}
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            {% block content %}
+            {% endblock %}
         </div>
     </div>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script src="{% static 'js/bootstrap.min.js' %}"></script>
     <script src="{% static 'js/jquery.cookie.js' %}"></script>
-    <script src="{% static 'js/functions.js' %}"></script>
+    {% block script %}
+    {% endblock %}
 
 </body>
 </html>
