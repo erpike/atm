@@ -8,7 +8,6 @@ $(document).ready(function(){
     };
 
     $(".btn-ctrl").click(function(){
-        //console.log('aaa')
         if ($(this).val() != 'C' && $(this).val() != 'Enter' && inputValue.length < CARD_PASS_LEN) {
             inputValue += $(this).val();
             //console.log(inputValue)
