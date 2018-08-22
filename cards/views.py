@@ -69,6 +69,7 @@ class CardPasswordValidationView(CardNumberMixin, SingleObjectMixin, View):
             request.session[card_number] = 0
             return HttpResponseRedirect(reverse('cards:menu'))
         request.session[card_number] += 1
+        messages.error(self.request, 'Wrong password!')
         pin_invalid_counter = request.session.get(card_number)
         if pin_invalid_counter > self.TRY_PIN_LIMIT:
             self.lock_card()
