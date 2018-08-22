@@ -27,19 +27,21 @@ class CardNumberValidationView(SingleObjectMixin, View):
     def post(self, request, *args, **kwargs):
         card = self.get_object()
         if not card:
-            messages.error(self.request, 'Incorrect card number or your card is probably blocked!')
-            return HttpResponseRedirect('/')
-        else:
-            request.session['number'] = card.number
-            if not request.session.get(card.number):
-                request.session[card.number] = 0
-            return HttpResponseRedirect(reverse('cards:pass_validator'))
-            #return render(request, 'cards/card-password.html', {})
+            #messages.error(self.request, 'Incorrect card number or your card is probably blocked!')
+            #return HttpResponseRedirect('/')
+            message = 'Incorrect card number or your card is probably blocked!'
+            return render(request, 'cards/card-error.html', {'message': message})
+        request.session['number'] = card.number
+
+        # initialize pin counter for each card
+        if not request.session.get(card.number):
+            request.session[card.number] = 0
+        return HttpResponseRedirect(reverse('cards:pass_validator'))
 
 
 class CardPasswordValidationView(CardNumberMixin, SingleObjectMixin, View):
     model = Card
-    TRY_PIN_LIMIT = 3
+    PIN_LIMIT = 3
 
     def lock_card(self):
         number = self.request.session.get('number')
@@ -68,14 +70,14 @@ class CardPasswordValidationView(CardNumberMixin, SingleObjectMixin, View):
             request.session['password'] = True
             request.session[card_number] = 0
             return HttpResponseRedirect(reverse('cards:menu'))
-        request.session[card_number] += 1
-        messages.error(self.request, 'Wrong password!')
         pin_invalid_counter = request.session.get(card_number)
-        if pin_invalid_counter > self.TRY_PIN_LIMIT:
+        pin_invalid_counter += 1
+        request.session[card_number] = pin_invalid_counter
+        message = 'Wrong password!'
+        if pin_invalid_counter > self.PIN_LIMIT:
             self.lock_card()
-            messages.error(self.request, 'Your card is blocked!')
-            return HttpResponseRedirect('/')
-        return render(request, 'cards/card-password.html', {})
+            message = 'Your card is blocked!'
+        return render(request, 'cards/card-error.html', {'message':message})
 
 
 class CardOperationsView(CardLoginMixin, SingleObjectMixin, View):
@@ -140,8 +142,10 @@ class CardWithdrawalView(CardLoginMixin, SingleObjectMixin, View):
             transaction.save()
             return HttpResponseRedirect(reverse('cards:checkout'))
 
-        messages.error(self.request, 'Not enough money on your card!')
-        return render(request, self.template_name, context)
+        #messages.error(self.request, 'Not enough money on your card!')
+        #return render(request, self.template_name, context)
+        message = 'Not enough money on your card!'
+        return render(request, 'cards/card-error.html', {'message': message})
 
 
 class CardCheckoutView(CardLoginMixin, SingleObjectMixin, View):
