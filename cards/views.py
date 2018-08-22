@@ -5,7 +5,7 @@ from django.views.generic.base import View
 from django.views.generic.detail import SingleObjectMixin
 
 from .models import Card
-from .mixins import CardNumberMixin
+from .mixins import CardNumberMixin, CardLoginMixin
 
 # Create your views here.
 class CardNumberValidationView(SingleObjectMixin, View):
@@ -58,26 +58,22 @@ class CardPasswordValidationView(CardNumberMixin, SingleObjectMixin, View):
         except:
             return None
 
-
     def get(self, request):
         return render(request, 'cards/card-password.html', {})
 
     def post(self, request):
         card_number = request.session.get('number')
+        card = self.get_object()
+        if card:
+            request.session['password'] = True
+        request.session[card_number] += 1
         pin_invalid_counter = request.session.get(card_number)
-        if pin_invalid_counter < self.TRY_PIN_LIMIT:
-            card = self.get_object()
-            if card:
-                print(card)
-            else:
-                request.session[card_number] += 1
-        else:
+        if pin_invalid_counter > self.TRY_PIN_LIMIT:
             self.lock_card()
             messages.error(self.request, 'Your card is blocked!')
             return HttpResponseRedirect('/')
-
-        print(request.session.get(card_number))
-        # else:
-        #     self.lock_card()
-        # print(request.session.get('pin_try'))
         return render(request, 'cards/card-password.html', {})
+
+
+# class CardDetailView(CardLoginMixin, SingleObjectMixin, View):
+#     model = Card

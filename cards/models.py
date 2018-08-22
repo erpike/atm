@@ -35,5 +35,6 @@ def card_item_post_save_receiver(sender, instance, created, *args, **kwargs):
         password = instance.password
         password = hashlib.md5(password.encode())
         instance.password = password.hexdigest()
+        instance.save()
 
 post_save.connect(card_item_post_save_receiver, sender=Card)
