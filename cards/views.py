@@ -4,7 +4,7 @@ from django.shortcuts import render, HttpResponse, HttpResponseRedirect, reverse
 from django.views.generic.base import View
 from django.views.generic.detail import SingleObjectMixin
 
-from .models import Card
+from .models import Card, Transaction
 from .mixins import CardNumberMixin, CardLoginMixin
 
 # Create your views here.
@@ -66,6 +66,7 @@ class CardPasswordValidationView(CardNumberMixin, SingleObjectMixin, View):
         card = self.get_object()
         if card:
             request.session['password'] = True
+            request.session[card_number] = 0
             return HttpResponseRedirect(reverse('cards:menu'))
         request.session[card_number] += 1
         pin_invalid_counter = request.session.get(card_number)
@@ -92,6 +93,65 @@ class CardDetailView(CardLoginMixin, SingleObjectMixin, View):
         card_number = self.request.session.get('number')
         object = get_object_or_404(Card, number=card_number)
         return object
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return context
+
+    def get(self, request):
+        self.object = self.get_object()
+        context = self.get_context_data()
+        transaction = Transaction()
+        transaction.card = self.object
+        transaction.type = 'balance'
+        transaction.save()
+        return render(request, self.template_name, context)
+
+
+class CardWithdrawalView(CardLoginMixin, SingleObjectMixin, View):
+    model = Card
+    template_name = 'cards/card-withdrawal.html'
+
+    def get_object(self, queryset=None):
+        card_number = self.request.session.get('number')
+        object = get_object_or_404(Card, number=card_number)
+        return object
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return context
+
+    def get(self, request):
+        self.object = self.get_object()
+        context = self.get_context_data()
+        return render(request, self.template_name, context)
+
+    def post(self, request):
+        self.object = self.get_object()
+        context = self.get_context_data()
+        required_cash = int(request.POST.get('cash'))
+        current_cash = self.object.balance
+        if required_cash < current_cash:
+            transaction = Transaction()
+            transaction.card = self.object
+            transaction.type = 'withdrawal'
+            transaction.cash_value = required_cash
+            transaction.save()
+            return HttpResponseRedirect(reverse('cards:checkout'))
+
+        messages.error(self.request, 'Not enough money on your card!')
+        return render(request, self.template_name, context)
+
+
+class CardCheckoutView(CardLoginMixin, SingleObjectMixin, View):
+    template_name = 'cards/card-checkout.html'
+    model = Transaction
+
+    def get_object(self, *args, **kwargs):
+        card_number = self.request.session.get('number')
+        card = get_object_or_404(Card, number=card_number)
+        transaction = card.transaction_set.all().order_by('-pk').first()
+        return transaction
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

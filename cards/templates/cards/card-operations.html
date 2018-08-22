@@ -13,7 +13,7 @@
     <div class="row control-row">
         <a href="{% url 'logout' %}"><button class="btn btn-info" value="">Exit</button></a>
         <a href="{% url 'cards:detail' %}"><button class="btn btn-info" value="">Balance</button></a>
-        <a href="#"><button class="btn btn-info" value="">Cash</button></a>
+        <a href="{% url 'cards:withdrawal' %}"><button class="btn btn-info" value="">Cash</button></a>
     </div>
 
 {% endblock %}

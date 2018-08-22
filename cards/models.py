@@ -1,9 +1,9 @@
 import hashlib
 
 from django.db import models
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, pre_save
 
-
+# Create your models here.
 class CardQuerySet(models.query.QuerySet):
     def active(self):
         return self.filter(locked=False)
@@ -17,7 +17,6 @@ class CardManager(models.Manager):
         return self.get_queryset().active()
 
 
-# Create your models here.
 class Card(models.Model):
     number = models.TextField(max_length=16, unique=True)
     password = models.TextField(max_length=256)
@@ -38,3 +37,28 @@ def card_item_post_save_receiver(sender, instance, created, *args, **kwargs):
         instance.save()
 
 post_save.connect(card_item_post_save_receiver, sender=Card)
+
+
+TRANSACTION_TYPE_CHOICES = (
+    ('balance', 'Balance'),
+    ('withdrawal', 'Withdrawal'),
+)
+
+class Transaction(models.Model):
+    card        = models.ForeignKey(Card, on_delete=models.CASCADE)
+    type        = models.CharField(max_length=120, choices=TRANSACTION_TYPE_CHOICES)
+    timestamp   = models.DateTimeField(auto_now_add=True, auto_now=False)
+    cash_value  = models.IntegerField(default=0)
+
+    def __str__(self):
+        return f'{self.card}:{self.type}:{self.timestamp}'
+
+
+def transaction_pre_save_receiver(sender, instance, *args, **kwargs):
+    if instance.type == 'balance':
+        instance.cash_value = instance.card.balance
+    if instance.type == 'withdrawal':
+        instance.card.balance -= instance.cash_value
+        instance.card.save()
+
+pre_save.connect(transaction_pre_save_receiver, sender=Transaction)

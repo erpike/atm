@@ -19,6 +19,7 @@
     <form class="confirm-form" method="POST" action="{{action}}">{% csrf_token %}
         <input type="hidden" name="card" id="card-num" value="">
         <input type="hidden" name="pass" id="card-pass" value="">
+        <input type="hidden" name="cash" id="card-cash" value="">
         <button class="btn btn-success btn-ctrl" value="Enter">Enter</button>
     </form>
 </div>
