@@ -16,7 +16,6 @@ $(document).ready(function(){
     };
 
     $(".btn-ctrl").click(function(){
-        console.log('sss')
         if ($(this).val() != 'C' && $(this).val() != 'Enter' && inputValue.length < CARD_NUM_LEN) {
                 inputValue += $(this).val();
                 $("#card-num").val(inputValue);

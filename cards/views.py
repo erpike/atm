@@ -1,6 +1,6 @@
 from django.contrib import messages
 from django.http import JsonResponse, HttpResponseForbidden
-from django.shortcuts import render, HttpResponse, HttpResponseRedirect, reverse
+from django.shortcuts import render, HttpResponse, HttpResponseRedirect, reverse, get_object_or_404
 from django.views.generic.base import View
 from django.views.generic.detail import SingleObjectMixin
 
@@ -66,6 +66,7 @@ class CardPasswordValidationView(CardNumberMixin, SingleObjectMixin, View):
         card = self.get_object()
         if card:
             request.session['password'] = True
+            return HttpResponseRedirect(reverse('cards:menu'))
         request.session[card_number] += 1
         pin_invalid_counter = request.session.get(card_number)
         if pin_invalid_counter > self.TRY_PIN_LIMIT:
@@ -75,5 +76,28 @@ class CardPasswordValidationView(CardNumberMixin, SingleObjectMixin, View):
         return render(request, 'cards/card-password.html', {})
 
 
-# class CardDetailView(CardLoginMixin, SingleObjectMixin, View):
-#     model = Card
+class CardOperationsView(CardLoginMixin, SingleObjectMixin, View):
+    model = Card
+    template_name = 'cards/card-operations.html'
+
+    def get(self, request, *args, **kwargs):
+        return render(request, self.template_name, {})
+
+
+class CardDetailView(CardLoginMixin, SingleObjectMixin, View):
+    model = Card
+    template_name = 'cards/card-detail.html'
+
+    def get_object(self, queryset=None):
+        card_number = self.request.session.get('number')
+        object = get_object_or_404(Card, number=card_number)
+        return object
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return context
+
+    def get(self, request):
+        self.object = self.get_object()
+        context = self.get_context_data()
+        return render(request, self.template_name, context)

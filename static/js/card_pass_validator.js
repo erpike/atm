@@ -10,9 +10,7 @@ $(document).ready(function(){
     $(".btn-ctrl").click(function(){
         if ($(this).val() != 'C' && $(this).val() != 'Enter' && inputValue.length < CARD_PASS_LEN) {
             inputValue += $(this).val();
-            //console.log(inputValue)
             $("#card-pass").val(inputValue);
-            //console.log($("#card-pass").val())
         }
         if ($(this).val() == 'C') {
             inputValue = ''

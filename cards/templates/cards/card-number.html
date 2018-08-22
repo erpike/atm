@@ -6,11 +6,16 @@
 {% block content %}
 
     <div class="row input-field">
-        <p>Input card number:</p>
-        <div ><input id="card-num-input" class="align-center" type="text" /></div>
+        <h3>Input card number:</h3>
+        <div ><input disabled id="card-num-input" class="align-center" type="text" /></div>
         <br/>
     </div>
 
+    <div class="row control-row">
+        <a href="{% url 'logout' %}"><button disabled class="btn btn-info" value="">Exit</button></a>
+        <button disabled class="btn" value="">Balance</button>
+        <button disabled class="btn" value="">Cash</button>
+    </div>
     {% include 'keyboard.html' with action='/card/num/' %}
 {% endblock %}
 
